@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp.csproj",
+      "projectUniqueName": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO_CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp.csproj",
       "projectName": "Sprint_POO-CSharp",
-      "projectPath": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp.csproj",
+      "projectPath": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO_CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp.csproj",
       "packagesPath": "C:\\Users\\020.747731\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\obj\\",
+      "outputPath": "C:\\Users\\020.747731\\source\\repos\\Sprint_POO_CSharp\\Sprint_POO-CSharp\\Sprint_POO-CSharp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\020.747731\\AppData\\Roaming\\NuGet\\NuGet.Config",
