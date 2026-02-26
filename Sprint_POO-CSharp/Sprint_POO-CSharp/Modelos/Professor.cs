@@ -5,7 +5,7 @@ internal class Professor : Pessoa
     private double Salario { get; set; }
     private List<string> Turmas { get; set; } = new List<string>();
 
-    public Professor(string nome, int cpf, DateTime dataNascimento, double salario)
+    public Professor(string nome, string cpf, DateTime dataNascimento, double salario)
         : base(nome, cpf, dataNascimento)
     {
         Salario = salario;
@@ -13,6 +13,6 @@ internal class Professor : Pessoa
 
     public override void ExibirDados()
     {
-        //Console.WriteLine($"[Professor] Nome: {Nome} | Salário: R${Salario:F2}");
+        Console.WriteLine($"[Professor] Nome: {Nome} | Salário: R${Salario:F2}");
     }
 }
