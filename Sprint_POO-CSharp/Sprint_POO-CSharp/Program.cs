@@ -3,7 +3,8 @@
 //Easy English
 string mensagemDeBoasVindas = "Bem-vindo a Easy English";
 
-//Dictionary<int, Menu> opcoes = new();
+var pessoas = new List<Pessoa>();
+
 void ExibirLogo()
 {
     Console.WriteLine(@"
@@ -16,48 +17,100 @@ void ExibirLogo()
 ");
     Console.WriteLine(mensagemDeBoasVindas);
 }
+bool executando = true;
 
-void ExibirOpcoesDoMenu()
+while (executando)
 {
+    Console.Clear();
     ExibirLogo();
-    Console.WriteLine("\nDigite 1 para cadastrar um novo aluno");
-    Console.WriteLine("Digite 2 para cadastrar um novo professor");
-    Console.WriteLine("Digite 3 para mostrar lista de pessoas cadastradas");
-    Console.WriteLine("Digite -1 para sair");
+    Console.WriteLine("\n--- SISTEMA DE GESTÃO ACADÊMICA ---");
+    Console.WriteLine("1. Cadastrar Aluno");
+    Console.WriteLine("2. Cadastrar Professor");
+    Console.WriteLine("3. Listar Todos e Estatísticas");
+    Console.WriteLine("0. Sair");
+    Console.Write("Escolha uma opção: ");
 
-    Console.Write("\nDigite a sua opção: ");
-    string opcaoEscolhida = Console.ReadLine()!;
-    int opcaoEscolhidaNumerica = int.Parse(opcaoEscolhida);
+    string opcao = Console.ReadLine();
 
-    //if (opcoes.ContainsKey(opcaoEscolhidaNumerica))
-    //{
-    //    Menu menuASerExibido = opcoes[opcaoEscolhidaNumerica];
-    //    menuASerExibido.Executar();
-    //    if (opcaoEscolhidaNumerica > 0) ExibirOpcoesDoMenu();
-    //}
-    //else
-    //{
-    //    Console.WriteLine("Opção inválida");
-    //}
+    switch (opcao)
+    {
+        case "1":
+            CadastrarAluno(pessoas);
+            break;
+        case "2":
+            CadastrarProfessor(pessoas);
+            break;
+        case "3":
+            ExibirRelatorios(pessoas);
+            break;
+        case "0":
+            executando = false;
+            break;
+        default:
+            Console.WriteLine("Opção inválida!");
+            break;
+    }
+}
+static void CadastrarAluno(List<Pessoa> lista)
+{
+    Console.Clear();
+    Console.Write("Nome do Aluno: ");
+    string nome = Console.ReadLine();
+    Console.Write("CPF: ");
+    string cpf = Console.ReadLine();
+    Console.Write("Matrícula (número): ");
+    int matricula = int.Parse(Console.ReadLine());
+
+    var aluno = new Aluno(nome, cpf, DateTime.Now, matricula);
+
+    Console.WriteLine("Digite as notas (ou -1 para parar):");
+    while (true)
+    {
+        Console.Write("Nota: ");
+        if (double.TryParse(Console.ReadLine(), out double nota))
+        {
+            if (nota == -1) break;
+            aluno.AdicionarNota(nota);
+        }
+    }
+    lista.Add(aluno);
+    Console.WriteLine("Aluno cadastrado com sucesso!");
+    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
+    Console.ReadKey();
 }
 
-//var pessoas = new List<Pessoa>();
+static void CadastrarProfessor(List<Pessoa> lista)
+{
+    Console.Clear();
+    Console.Write("Nome do Professor: ");
+    string nome = Console.ReadLine();
+    Console.Write("CPF: ");
+    string cpf = Console.ReadLine();
+    Console.Write("Salário: ");
+    double salario = double.Parse(Console.ReadLine());
 
-//var aluno1 = new Aluno("João", 123, new DateTime(2005, 5, 10), 01);
-//aluno1.Notas.AddRange(new[] { 8.5, 7.0, 9.0 });
+    var prof = new Professor(nome, cpf, DateTime.Now, salario);
+    lista.Add(prof);
+    Console.WriteLine("Professor cadastrado com sucesso!");
+    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
+    Console.ReadKey();
+}
 
-//var prof1 = new Professor("Dr. Smith", 456, new DateTime(1980, 1, 1), 5000.00);
+static void ExibirRelatorios(List<Pessoa> lista)
+{
+    Console.Clear();
+    Console.WriteLine("\n--- LISTAGEM GERAL ---");
+    foreach (var p in lista)
+    {
+        p.ExibirDados();
+    }
 
-//pessoas.Add(aluno1);
-//pessoas.Add(prof1);
-
-//Console.WriteLine("--- Listagem Acadêmica ---");
-//foreach (var pessoa in pessoas)
-//{
-//    pessoa.ExibirDados();
-//}
-
-//double mediaGeralAlunos = pessoas.OfType<Aluno>().Average(a => a.CalcularMedia());
-//Console.WriteLine($"\nMédia Geral dos Alunos: {mediaGeralAlunos:F2}");
-
-ExibirOpcoesDoMenu();
+    var alunos = lista.OfType<Aluno>().ToList();
+    if (alunos.Any())
+    {
+        double mediaGeral = alunos.Average(a => a.CalcularMedia());
+        Console.WriteLine($"\nMédia Geral de todos os alunos: {mediaGeral:F2}");
+    }
+    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
+    Console.ReadKey();
+}
