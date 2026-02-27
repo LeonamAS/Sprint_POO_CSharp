@@ -35,10 +35,13 @@ while (executando)
     switch (opcao)
     {
         case "1":
-            CadastrarAluno(pessoas);
+            var novoAluno = Aluno.CadastrarAluno();
+            pessoas.Add(novoAluno);
+            FinalizarCadastro("Aluno");
             break;
         case "2":
-            CadastrarProfessor(pessoas);
+            pessoas.Add(Professor.CadastrarProfessor());
+            FinalizarCadastro("Professor");
             break;
         case "3":
             ExibirRelatorios(pessoas);
@@ -51,51 +54,12 @@ while (executando)
             break;
     }
 }
-static void CadastrarAluno(List<Pessoa> lista)
+static void FinalizarCadastro(string tipo)
 {
-    Console.Clear();
-    Console.Write("Nome do Aluno: ");
-    string nome = Console.ReadLine();
-    Console.Write("CPF: ");
-    string cpf = Console.ReadLine();
-    Console.Write("Matrícula (número): ");
-    int matricula = int.Parse(Console.ReadLine());
-
-    var aluno = new Aluno(nome, cpf, DateTime.Now, matricula);
-
-    Console.WriteLine("Digite as notas (ou -1 para parar):");
-    while (true)
-    {
-        Console.Write("Nota: ");
-        if (double.TryParse(Console.ReadLine(), out double nota))
-        {
-            if (nota == -1) break;
-            aluno.AdicionarNota(nota);
-        }
-    }
-    lista.Add(aluno);
-    Console.WriteLine("Aluno cadastrado com sucesso!");
-    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
+    Console.WriteLine($"\n{tipo} cadastrado com sucesso!");
+    Console.WriteLine("Pressione qualquer tecla para voltar...");
     Console.ReadKey();
 }
-
-static void CadastrarProfessor(List<Pessoa> lista)
-{
-    Console.Clear();
-    Console.Write("Nome do Professor: ");
-    string nome = Console.ReadLine();
-    Console.Write("CPF: ");
-    string cpf = Console.ReadLine();
-    Console.Write("Salário: ");
-    double salario = double.Parse(Console.ReadLine());
-
-    var prof = new Professor(nome, cpf, DateTime.Now, salario);
-    lista.Add(prof);
-    Console.WriteLine("Professor cadastrado com sucesso!");
-    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
-    Console.ReadKey();
-}
-
 static void ExibirRelatorios(List<Pessoa> lista)
 {
     Console.Clear();

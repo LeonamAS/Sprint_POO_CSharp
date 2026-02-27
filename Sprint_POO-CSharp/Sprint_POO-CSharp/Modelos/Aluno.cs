@@ -28,4 +28,29 @@ internal class Aluno : Pessoa
     {
         Console.WriteLine($"[Aluno] Nome: {Nome} | Média: {CalcularMedia():F2}");
     }
+
+    public static Aluno CadastrarAluno()
+    {
+        Console.Clear();
+        Console.Write("Nome do Aluno: ");
+        string nome = Console.ReadLine();
+        Console.Write("CPF: ");
+        string cpf = Console.ReadLine();
+        Console.Write("Matrícula (número): ");
+        int matricula = int.Parse(Console.ReadLine());
+
+        var aluno = new Aluno(nome, cpf, DateTime.Now, matricula);
+
+        Console.WriteLine("Digite as notas (ou -1 para parar):");
+        while (true)
+        {
+            Console.Write("Nota: ");
+            if (double.TryParse(Console.ReadLine(), out double nota))
+            {
+                if (nota == -1) break;
+                aluno.AdicionarNota(nota);
+            }
+        }
+        return aluno;
+    }
 }

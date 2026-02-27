@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Sprint_POO-CSharp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+73aff2e1205b3d61672ef6bb242df0617c8107e2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5ecc6525f85592560980b16534b66da4f561eb7")]
 [assembly: System.Reflection.AssemblyProductAttribute("Sprint_POO-CSharp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Sprint_POO-CSharp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
