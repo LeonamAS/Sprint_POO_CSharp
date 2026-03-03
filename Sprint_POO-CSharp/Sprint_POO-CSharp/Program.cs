@@ -1,6 +1,5 @@
 ﻿using Sprint_POO_CSharp.Modelos;
 
-//Easy English
 string mensagemDeBoasVindas = "Bem-vindo a Easy English";
 
 var pessoas = new List<Pessoa>();
@@ -26,7 +25,9 @@ while (executando)
     Console.WriteLine("\n--- SISTEMA DE GESTÃO ACADÊMICA ---");
     Console.WriteLine("1. Cadastrar Aluno");
     Console.WriteLine("2. Cadastrar Professor");
-    Console.WriteLine("3. Listar Todos e Estatísticas");
+    Console.WriteLine("3. Inserir Notas dos Alunos");
+    Console.WriteLine("4. Definir Turmas dos Professores");
+    Console.WriteLine("5. Listar Todos e Estatísticas");
     Console.WriteLine("0. Sair");
     Console.Write("Escolha uma opção: ");
 
@@ -44,6 +45,12 @@ while (executando)
             FinalizarCadastro("Professor");
             break;
         case "3":
+            Aluno.InserirNotas(pessoas);
+            break;
+        case "4":
+            Professor.DefinirTurmas(pessoas);
+            break;
+        case "5":
             ExibirRelatorios(pessoas);
             break;
         case "0":

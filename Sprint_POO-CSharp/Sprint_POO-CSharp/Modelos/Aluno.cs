@@ -50,7 +50,67 @@ internal class Aluno : Pessoa
                 if (nota == -1) break;
                 aluno.AdicionarNota(nota);
             }
+            else
+            {
+                Console.WriteLine("Valor inválido. Digite um número.");
+            }
         }
         return aluno;
+    }
+
+    public static void InserirNotas(List<Pessoa> listaPessoas)
+    {
+        Console.Clear();
+        Console.WriteLine("--- INSERIR NOTAS DE ALUNO EXISTENTE ---");
+
+        var alunos = listaPessoas.OfType<Aluno>().ToList();
+
+        if (alunos.Count == 0)
+        {
+            Console.WriteLine("Nenhum aluno cadastrado no sistema.");
+            Console.WriteLine("Pressione qualquer tecla para voltar...");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.WriteLine("Alunos disponíveis:");
+        foreach (var aluno in alunos)
+        {
+            aluno.ExibirDados();
+        }
+
+        Console.Write("\nDigite o CPF do aluno para adicionar notas: ");
+        string cpfBusca = Console.ReadLine();
+
+        var alunoEncontrado = alunos.FirstOrDefault(aluno => aluno.CPF == cpfBusca);
+
+        if (alunoEncontrado != null)
+        {
+            Console.WriteLine($"\nAdicionando notas para: {alunoEncontrado.Nome}");
+            Console.WriteLine("Digite as notas (ou -1 para parar):");
+
+            while (true)
+            {
+                Console.Write("Nota: ");
+                if (double.TryParse(Console.ReadLine(), out double nota))
+                {
+                    if (nota == -1) break;
+
+                    alunoEncontrado.AdicionarNota(nota);
+                }
+                else
+                {
+                    Console.WriteLine("Valor inválido. Digite um número.");
+                }
+            }
+            Console.WriteLine("Notas atualizadas com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("\nAluno não encontrado com esse CPF.");
+        }
+
+        Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
     }
 }
