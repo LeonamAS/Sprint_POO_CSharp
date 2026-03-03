@@ -32,12 +32,30 @@ internal class Aluno : Pessoa
     public static Aluno CadastrarAluno()
     {
         Console.Clear();
+        Console.WriteLine("--- CADASTRAR NOVO ALUNO ---\n");
         Console.Write("Nome do Aluno: ");
-        string nome = Console.ReadLine();
+        string nome = Console.ReadLine()!;
+
         Console.Write("CPF: ");
-        string cpf = Console.ReadLine();
-        Console.Write("Matrícula (número): ");
-        int matricula = int.Parse(Console.ReadLine());
+        string cpf = Console.ReadLine()!;
+        //Tornar impossível adicionar aluno sem CPF
+
+        int matricula;
+
+        while (true)
+        {
+            Console.Write("Matrícula (número): ");
+            string entrada = Console.ReadLine()!;
+
+            if (int.TryParse(entrada, out matricula))
+            {
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Valor inválido. Por favor, digite apenas números inteiros para a matrícula.");
+            }
+        }
 
         var aluno = new Aluno(nome, cpf, DateTime.Now, matricula);
 
@@ -80,7 +98,7 @@ internal class Aluno : Pessoa
         }
 
         Console.Write("\nDigite o CPF do aluno para adicionar notas: ");
-        string cpfBusca = Console.ReadLine();
+        string cpfBusca = Console.ReadLine()!;
 
         var alunoEncontrado = alunos.FirstOrDefault(aluno => aluno.CPF == cpfBusca);
 

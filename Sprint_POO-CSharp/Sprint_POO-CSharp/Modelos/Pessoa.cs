@@ -4,6 +4,7 @@ internal abstract class Pessoa
 {
     public string Nome { get; set; }
     public string CPF { get; set; }
+    //Definir um formato expecifico para o cpf
     protected DateTime DataDeNascimento { get; set; }
 
     public Pessoa(string nome, string cpf, DateTime dataDeNascimento)

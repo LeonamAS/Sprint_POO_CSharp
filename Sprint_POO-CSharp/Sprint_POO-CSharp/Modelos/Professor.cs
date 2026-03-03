@@ -4,6 +4,7 @@ internal class Professor : Pessoa
 {
     private double Salario { get; set; }
     private List<string> Turmas { get; set; } = new List<string>();
+    //Definir um padrão para as turmas
 
     public Professor(string nome, string cpf, DateTime dataNascimento, double salario)
         : base(nome, cpf, dataNascimento)
@@ -29,14 +30,37 @@ internal class Professor : Pessoa
     public static Professor CadastrarProfessor()
     {
         Console.Clear();
+        Console.WriteLine("--- CADASTRAR NOVO PROFESSOR ---\n");
         Console.Write("Nome do Professor: ");
-        string nome = Console.ReadLine();
+        string nome = Console.ReadLine()!;
 
         Console.Write("CPF: ");
-        string cpf = Console.ReadLine();
+        string cpf = Console.ReadLine()!;
+        //Tornar impossível adicionar professor sem CPF;
 
-        Console.Write("Salário: ");
-        double salario = double.Parse(Console.ReadLine());
+        double salario;
+
+        while (true)
+        {
+            Console.Write("Salário: ");
+            string entrada = Console.ReadLine()!;
+
+            if (double.TryParse(entrada, out salario))
+            {
+                if (salario >= 0)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("O salário não pode ser negativo. Digite um valor válido.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Valor inválido. Por favor, digite apenas números para o salário.");
+            }
+        }
 
         var prof = new Professor(nome, cpf, DateTime.Now, salario);
 
@@ -45,7 +69,7 @@ internal class Professor : Pessoa
         {
             
             Console.Write("Turma: ");
-            string turma = Console.ReadLine();
+            string turma = Console.ReadLine()!;
 
             if (turma == "-1") break;
             prof.AdicionarTurma(turma);

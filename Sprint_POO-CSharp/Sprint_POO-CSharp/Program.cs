@@ -71,9 +71,9 @@ static void ExibirRelatorios(List<Pessoa> lista)
 {
     Console.Clear();
     Console.WriteLine("\n--- LISTAGEM GERAL ---");
-    foreach (var p in lista)
+    foreach (var pessoa in lista)
     {
-        p.ExibirDados();
+        pessoa.ExibirDados();
     }
 
     var alunos = lista.OfType<Aluno>().ToList();
