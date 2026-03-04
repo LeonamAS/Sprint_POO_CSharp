@@ -2,10 +2,10 @@
 
 internal class Aluno : Pessoa
 {
-    private int Matricula { get; set; }
+    private string Matricula { get; set; }
     private List<double> Notas { get; set; } = new List<double>();
 
-    public Aluno(string nome, string cpf, DateTime dataNascimento, int matricula)
+    public Aluno(string nome, string cpf, DateTime dataNascimento, string matricula)
         : base(nome, cpf, dataNascimento)
     {
         Matricula = matricula;
@@ -26,7 +26,7 @@ internal class Aluno : Pessoa
 
     public override void ExibirDados()
     {
-        Console.WriteLine($"[Aluno] Nome: {Nome} | Média: {CalcularMedia():F2}");
+        Console.WriteLine($"[Aluno] Nome: {Nome} | CPF: {CPF} | Matrícula: {Matricula} | Média: {CalcularMedia():F2}");
     }
 
     public static Aluno CadastrarAluno()
@@ -36,24 +36,41 @@ internal class Aluno : Pessoa
         Console.Write("Nome do Aluno: ");
         string nome = Console.ReadLine()!;
 
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine()!;
-        //Tornar impossível adicionar aluno sem CPF
-
-        int matricula;
-
+        string cpf = "";
         while (true)
         {
-            Console.Write("Matrícula (número): ");
-            string entrada = Console.ReadLine()!;
+            Console.Write("CPF (somente números, 11 dígitos): ");
+            string entradaCpf = Console.ReadLine()!;
 
-            if (int.TryParse(entrada, out matricula))
+            string apenasNumeros = new string(entradaCpf.Where(char.IsDigit).ToArray());
+
+            if (apenasNumeros.Length == 11)
             {
+                cpf = apenasNumeros;
                 break;
             }
             else
             {
-                Console.WriteLine("Valor inválido. Por favor, digite apenas números inteiros para a matrícula.");
+                Console.WriteLine("CPF inválido! O CPF deve conter exatamente 11 números. Tente novamente.");
+            }
+        }
+
+        string matricula = "";
+        while (true)
+        {
+            Console.Write("Matrícula (exatamente 6 números): ");
+            string entradaMatricula = Console.ReadLine()!;
+
+            string apenasNumerosMatricula = new string(entradaMatricula.Where(char.IsDigit).ToArray());
+
+            if (apenasNumerosMatricula.Length == 6)
+            {
+                matricula = apenasNumerosMatricula;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Matrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
             }
         }
 
@@ -85,7 +102,7 @@ internal class Aluno : Pessoa
 
         if (alunos.Count == 0)
         {
-            Console.WriteLine("Nenhum aluno cadastrado no sistema.");
+            Console.WriteLine("\nNenhum aluno cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -100,7 +117,11 @@ internal class Aluno : Pessoa
         Console.Write("\nDigite o CPF do aluno para adicionar notas: ");
         string cpfBusca = Console.ReadLine()!;
 
-        var alunoEncontrado = alunos.FirstOrDefault(aluno => aluno.CPF == cpfBusca);
+        string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
+
+        var alunoEncontrado = alunos.FirstOrDefault(aluno =>
+            new string(aluno.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
+        );
 
         if (alunoEncontrado != null)
         {
@@ -121,7 +142,7 @@ internal class Aluno : Pessoa
                     Console.WriteLine("Valor inválido. Digite um número.");
                 }
             }
-            Console.WriteLine("Notas atualizadas com sucesso!");
+            Console.WriteLine("\nNotas atualizadas com sucesso!");
         }
         else
         {

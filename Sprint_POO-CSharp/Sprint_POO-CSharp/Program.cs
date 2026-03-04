@@ -3,7 +3,6 @@
 string mensagemDeBoasVindas = "Bem-vindo a Easy English";
 
 var pessoas = new List<Pessoa>();
-
 void ExibirLogo()
 {
     Console.WriteLine(@"
@@ -31,7 +30,7 @@ while (executando)
     Console.WriteLine("0. Sair");
     Console.Write("Escolha uma opção: ");
 
-    string opcao = Console.ReadLine();
+    string opcao = Console.ReadLine()!;
 
     switch (opcao)
     {

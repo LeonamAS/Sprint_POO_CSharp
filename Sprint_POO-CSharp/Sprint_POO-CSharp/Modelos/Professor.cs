@@ -4,7 +4,6 @@ internal class Professor : Pessoa
 {
     private double Salario { get; set; }
     private List<string> Turmas { get; set; } = new List<string>();
-    //Definir um padrão para as turmas
 
     public Professor(string nome, string cpf, DateTime dataNascimento, double salario)
         : base(nome, cpf, dataNascimento)
@@ -19,7 +18,7 @@ internal class Professor : Pessoa
         }
         else
         {
-            Console.WriteLine("O nome da turma não pode estar vazio!");
+            Console.WriteLine("\nO nome da turma não pode estar vazio!");
         }
     }
     public override void ExibirDados()
@@ -34,9 +33,24 @@ internal class Professor : Pessoa
         Console.Write("Nome do Professor: ");
         string nome = Console.ReadLine()!;
 
-        Console.Write("CPF: ");
-        string cpf = Console.ReadLine()!;
-        //Tornar impossível adicionar professor sem CPF;
+        string cpf = "";
+        while (true)
+        {
+            Console.Write("CPF (somente números, 11 dígitos): ");
+            string entradaCpf = Console.ReadLine()!;
+
+            string apenasNumeros = new string(entradaCpf.Where(char.IsDigit).ToArray());
+
+            if (apenasNumeros.Length == 11)
+            {
+                cpf = apenasNumeros;
+                break;
+            }
+            else
+            {
+                Console.WriteLine("\nCPF inválido! O CPF deve conter exatamente 11 números. Tente novamente.");
+            }
+        }
 
         double salario;
 
@@ -53,12 +67,12 @@ internal class Professor : Pessoa
                 }
                 else
                 {
-                    Console.WriteLine("O salário não pode ser negativo. Digite um valor válido.");
+                    Console.WriteLine("\nO salário não pode ser negativo. Digite um valor válido.");
                 }
             }
             else
             {
-                Console.WriteLine("Valor inválido. Por favor, digite apenas números para o salário.");
+                Console.WriteLine("\nValor inválido. Por favor, digite apenas números para o salário.");
             }
         }
 
@@ -85,7 +99,7 @@ internal class Professor : Pessoa
 
         if (professores.Count == 0)
         {
-            Console.WriteLine("Nenhum professor cadastrado no sistema.");
+            Console.WriteLine("\nNenhum professor cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -98,9 +112,13 @@ internal class Professor : Pessoa
         }
 
         Console.Write("\nDigite o CPF do professor para adicionar turmas: ");
-        string cpfBusca = Console.ReadLine();
+        string cpfBusca = Console.ReadLine()!;
 
-        var professorEncontrado = professores.FirstOrDefault(professor => professor.CPF == cpfBusca);
+        string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
+
+        var professorEncontrado = professores.FirstOrDefault(professor =>
+            new string(professor.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
+        );
 
         if (professorEncontrado != null)
         {
@@ -110,13 +128,13 @@ internal class Professor : Pessoa
             while (true)
             {
                 Console.Write("Turma: ");
-                string turma = Console.ReadLine();
+                string turma = Console.ReadLine()!;
 
                 if(turma == "-1") break;
 
                 professorEncontrado.AdicionarTurma(turma);
             }
-            Console.WriteLine("Turmas atualizadas com sucesso!");
+            Console.WriteLine("\nTurmas atualizadas com sucesso!");
         }
         else
         {
