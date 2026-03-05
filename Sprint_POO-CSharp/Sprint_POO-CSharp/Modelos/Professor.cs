@@ -26,7 +26,7 @@ internal class Professor : Pessoa
         string listaTurmas = Turmas.Count > 0 ? string.Join(", ", Turmas) : "Nenhuma turma";
         Console.WriteLine($"[Professor] Nome: {Nome} | CPF: {CPF} | Salário: R${Salario:F2} | Turmas: {listaTurmas}");
     }
-    public static Professor CadastrarProfessor()
+    public static Professor CadastrarProfessor(List<Pessoa> listaPessoas)
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO PROFESSOR ---\n");
@@ -38,13 +38,21 @@ internal class Professor : Pessoa
         {
             Console.Write("CPF (somente números, 11 dígitos): ");
             string entradaCpf = Console.ReadLine()!;
-
             string apenasNumeros = new string(entradaCpf.Where(char.IsDigit).ToArray());
 
             if (apenasNumeros.Length == 11)
             {
-                cpf = apenasNumeros;
-                break;
+                bool cpfJaExiste = listaPessoas.Any(pessoa => new string(pessoa.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros);
+
+                if (cpfJaExiste)
+                {
+                    Console.WriteLine("Erro: Este CPF já está cadastrado no sistema para outra pessoa. Tente novamente.\n");
+                }
+                else
+                {
+                    cpf = apenasNumeros;
+                    break;
+                }
             }
             else
             {

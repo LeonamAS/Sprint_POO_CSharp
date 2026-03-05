@@ -3,33 +3,39 @@
 internal class Aluno : Pessoa
 {
     private string Matricula { get; set; }
+    private bool Situacao { get; set; }
     private List<double> Notas { get; set; } = new List<double>();
 
-    public Aluno(string nome, string cpf, DateTime dataNascimento, string matricula)
+    public Aluno(string nome, string cpf, DateTime dataNascimento, string matricula, bool situacao)
         : base(nome, cpf, dataNascimento)
     {
         Matricula = matricula;
+        Situacao = situacao;
     }
 
     public void AdicionarNota(double nota)
     {
+        if (!Situacao)
+        {
+            Console.WriteLine($"\nAção Negada: O aluno {Nome} está com a matrícula inativa e não pode receber notas. ");
+            return;
+        }
         if (nota >= 0 && nota <= 10)
         {
             Notas.Add(nota);
         }
         else
         {
-            Console.WriteLine($"Nota {nota} inválida!!! Use valores entre 0 e 10.");
+            Console.WriteLine($"\nNota {nota} inválida!!! Use valores entre 0 e 10.");
         }
     }
     public double CalcularMedia() => Notas.Count > 0 ? Notas.Average() : 0;
-
     public override void ExibirDados()
     {
-        Console.WriteLine($"[Aluno] Nome: {Nome} | CPF: {CPF} | Matrícula: {Matricula} | Média: {CalcularMedia():F2}");
+        string status = Situacao ? "Ativo" : "Inativo";
+        Console.WriteLine($"[Aluno] Nome: {Nome} | CPF: {CPF} | Matrícula: {Matricula} | Status: {status} | Média: {CalcularMedia():F2}");
     }
-
-    public static Aluno CadastrarAluno()
+    public static Aluno CadastrarAluno(List<Pessoa> listaPessoas)
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO ALUNO ---\n");
@@ -41,13 +47,21 @@ internal class Aluno : Pessoa
         {
             Console.Write("CPF (somente números, 11 dígitos): ");
             string entradaCpf = Console.ReadLine()!;
-
             string apenasNumeros = new string(entradaCpf.Where(char.IsDigit).ToArray());
 
             if (apenasNumeros.Length == 11)
             {
-                cpf = apenasNumeros;
-                break;
+                bool cpfJaExiste = listaPessoas.Any(pessoa => new string(pessoa.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros);
+
+                if (cpfJaExiste)
+                {
+                    Console.WriteLine("\nErro: Este CPF já está cadastrado no sistema para outra pessoa. Tente novamente.\n");
+                }
+                else
+                {
+                    cpf = apenasNumeros;
+                    break;
+                }
             }
             else
             {
@@ -65,16 +79,25 @@ internal class Aluno : Pessoa
 
             if (apenasNumerosMatricula.Length == 6)
             {
-                matricula = apenasNumerosMatricula;
-                break;
+                bool matriculaJaExiste = listaPessoas.OfType<Aluno>().Any(aluno => aluno.Matricula == apenasNumerosMatricula);
+
+                if (matriculaJaExiste)
+                {
+                    Console.WriteLine("\nErro: Esta matrícula já está cadastrada para outro aluno. Tente novamente.\n");
+                }
+                else
+                {
+                    matricula = apenasNumerosMatricula;
+                    break;
+                }
             }
             else
             {
-                Console.WriteLine("Matrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
+                Console.WriteLine("\nMatrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
             }
         }
 
-        var aluno = new Aluno(nome, cpf, DateTime.Now, matricula);
+        var aluno = new Aluno(nome, cpf, DateTime.Now, matricula, true);
 
         Console.WriteLine("Digite as notas (ou -1 para parar):");
         while (true)
@@ -92,7 +115,6 @@ internal class Aluno : Pessoa
         }
         return aluno;
     }
-
     public static void InserirNotas(List<Pessoa> listaPessoas)
     {
         Console.Clear();
@@ -150,6 +172,50 @@ internal class Aluno : Pessoa
         }
 
         Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
+    }
+    public static void AlterarSituacaoAluno(List<Pessoa> listaPessoas)
+    {
+        Console.Clear();
+        Console.WriteLine("--- ALTERAR SITUAÇÃO DA MATRÍCULA (ATIVAR / TRANCAR) ---");
+
+        var alunos = listaPessoas.OfType<Aluno>().ToList();
+
+        if (alunos.Count == 0)
+        {
+            Console.WriteLine("Nenhum aluno cadastrado no sistema.");
+            Console.WriteLine("Pressione qualquer tecla para voltar...");
+            Console.ReadKey();
+            return;
+        }
+
+        Console.WriteLine("Alunos disponíveis:");
+        foreach (var aluno in alunos)
+        {
+            aluno.ExibirDados();
+        }
+
+        Console.Write("\nDigite o CPF do aluno para alterar a situação: ");
+        string cpfBusca = Console.ReadLine()!;
+
+        string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
+        var alunoEncontrado = alunos.FirstOrDefault(aluno =>
+            new string(aluno.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
+        );
+
+        if (alunoEncontrado != null)
+        {
+            alunoEncontrado.Situacao = !alunoEncontrado.Situacao;
+
+            string statusAtual = alunoEncontrado.Situacao ? "Ativa" : "Inativa";
+            Console.WriteLine($"\nSucesso! A matrícula de {alunoEncontrado.Nome} agora está: {statusAtual}");
+        }
+        else
+        {
+            Console.WriteLine("\nAluno não encontrado com esse CPF.");
+        }
+
+        Console.WriteLine("\nPressione qualquer tecla para voltar...");
         Console.ReadKey();
     }
 }
