@@ -33,14 +33,33 @@ internal class Aluno : Pessoa
     public override void ExibirDados()
     {
         string status = Situacao ? "Ativo" : "Inativo";
-        Console.WriteLine($"[Aluno] Nome: {Nome} | CPF: {CPF} | Matrícula: {Matricula} | Status: {status} | Média: {CalcularMedia():F2}");
+        Console.WriteLine($" {Nome,-22} | {CPF,-14} | {Matricula,-9} | {status,-7} | {CalcularMedia():F2}");
     }
     public static Aluno CadastrarAluno(List<Pessoa> listaPessoas)
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO ALUNO ---\n");
         Console.Write("Nome do Aluno: ");
-        string nome = Console.ReadLine()!;
+
+        string nome = "";
+        while (true)
+        {
+            Console.Write("Nome do Aluno: ");
+            nome = Console.ReadLine()!;
+
+            if (string.IsNullOrWhiteSpace(nome))
+            {
+                Console.WriteLine("O nome não pode ficar em branco. Tente novamente.\n");
+            }
+            else if (nome.Any(char.IsDigit))
+            {
+                Console.WriteLine("Erro: O nome não pode conter números. Tente novamente.\n");
+            }
+            else
+            {
+                break;
+            }
+        }
 
         string cpf = "";
         while (true)

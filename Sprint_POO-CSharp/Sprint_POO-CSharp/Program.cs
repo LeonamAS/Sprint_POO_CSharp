@@ -1,36 +1,36 @@
 ﻿using Sprint_POO_CSharp.Modelos;
 
-string mensagemDeBoasVindas = "Bem-vindo a Easy English";
-
 var pessoas = new List<Pessoa>();
 GerarDadosMockup(pessoas);
 void ExibirLogo()
 {
     Console.WriteLine(@"
-███████╗░█████╗░░██████╗██╗░░░██╗  ███████╗███╗░░██╗░██████╗░██╗░░░░░██╗░██████╗██╗░░██╗
-██╔════╝██╔══██╗██╔════╝╚██╗░██╔╝  ██╔════╝████╗░██║██╔════╝░██║░░░░░██║██╔════╝██║░░██║
-█████╗░░███████║╚█████╗░░╚████╔╝░  █████╗░░██╔██╗██║██║░░██╗░██║░░░░░██║╚█████╗░███████║
-██╔══╝░░██╔══██║░╚═══██╗░░╚██╔╝░░  ██╔══╝░░██║╚████║██║░░╚██╗██║░░░░░██║░╚═══██╗██╔══██║
-███████╗██║░░██║██████╔╝░░░██║░░░  ███████╗██║░╚███║╚██████╔╝███████╗██║██████╔╝██║░░██║
-╚══════╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░  ╚══════╝╚═╝░░╚══╝░╚═════╝░╚══════╝╚═╝╚═════╝░╚═╝░░╚═╝
+███████╗ █████╗  ██████╗██╗   ██╗  ███████╗███╗  ██╗ ██████╗ ██╗     ██╗ ██████╗██╗  ██╗
+██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝  ██╔════╝████╗ ██║██╔════╝ ██║     ██║██╔════╝██║  ██║
+█████╗  ███████║╚█████╗  ╚████╔╝   █████╗  ██╔██╗██║██║  ██╗ ██║     ██║╚█████╗ ███████║
+██╔══╝  ██╔══██║ ╚═══██╗  ╚██╔╝    ██╔══╝  ██║╚████║██║  ╚██╗██║     ██║ ╚═══██╗██╔══██║
+███████╗██║  ██║██████╔╝   ██║     ███████╗██║ ╚███║╚██████╔╝███████╗██║██████╔╝██║  ██║
+╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝     ╚══════╝╚═╝  ╚══╝ ╚═════╝ ╚══════╝╚═╝╚═════╝ ╚═╝  ╚═╝
 ");
-    Console.WriteLine(mensagemDeBoasVindas);
 }
-bool executando = true;
 
+bool executando = true;
 while (executando)
 {
     Console.Clear();
     ExibirLogo();
-    Console.WriteLine("\n--- SISTEMA DE GESTÃO ACADÊMICA ---");
-    Console.WriteLine("1. Cadastrar Aluno");
-    Console.WriteLine("2. Cadastrar Professor");
-    Console.WriteLine("3. Inserir Notas dos Alunos");
-    Console.WriteLine("4. Definir Turmas dos Professores");
-    Console.WriteLine("5. Trancar / Ativar Matrícula de Aluno");
-    Console.WriteLine("6. Listar Todos e Estatísticas");
-    Console.WriteLine("0. Sair");
-    Console.Write("Escolha uma opção: ");
+    Console.WriteLine("\n=========================================");
+    Console.WriteLine("===    SISTEMA DE GESTÃO ACADÊMICA    ===");
+    Console.WriteLine("=========================================\n");
+    Console.WriteLine(" 1. Cadastrar Aluno");
+    Console.WriteLine(" 2. Cadastrar Professor");
+    Console.WriteLine(" 3. Inserir Notas dos Alunos");
+    Console.WriteLine(" 4. Definir Turmas dos Professores");
+    Console.WriteLine(" 5. Trancar / Ativar Matrícula de Aluno");
+    Console.WriteLine(" 6. Alterar Salário de professor");
+    Console.WriteLine(" 7. Listar Todos e Estatísticas");
+    Console.WriteLine(" 0. Sair");
+    Console.Write("\nEscolha uma opção: ");
 
     string opcao = Console.ReadLine()!;
 
@@ -54,6 +54,9 @@ while (executando)
             Aluno.AlterarSituacaoAluno(pessoas);
             break;
         case "6":
+            Professor.AlterarSalario(pessoas);
+            break;
+        case "7":
             ExibirRelatorios(pessoas);
             break;
         case "0":
@@ -73,19 +76,50 @@ static void FinalizarCadastro(string tipo)
 static void ExibirRelatorios(List<Pessoa> lista)
 {
     Console.Clear();
-    Console.WriteLine("\n--- LISTAGEM GERAL ---");
-    foreach (var pessoa in lista)
-    {
-        pessoa.ExibirDados();
-    }
+    Console.WriteLine("\n===============================================================================");
+    Console.WriteLine("                           RELATÓRIO GERAL DO SISTEMA                          ");
+    Console.WriteLine("===============================================================================\n");
 
     var alunos = lista.OfType<Aluno>().ToList();
+    var professores = lista.OfType<Professor>().ToList();
+
+    // --- TABELA DE ALUNOS ---
     if (alunos.Any())
     {
+        Console.WriteLine("----------------------------------- ALUNOS ------------------------------------");
+        Console.WriteLine($" {"NOME",-22} | {"CPF",-14} | {"MATRÍCULA",-9} | {"STATUS",-7} | {"MÉDIA"}");
+        Console.WriteLine("-------------------------------------------------------------------------------");
+
+        foreach (var aluno in alunos)
+        {
+            aluno.ExibirDados();
+        }
+
+        Console.WriteLine("-------------------------------------------------------------------------------");
         double mediaGeral = alunos.Average(a => a.CalcularMedia());
-        Console.WriteLine($"\nMédia Geral de todos os alunos: {mediaGeral:F2}");
+        Console.WriteLine($"MÉDIA GERAL DA ESCOLA: {mediaGeral:F2}\n");
     }
-    Console.WriteLine("Digite uma tecla para voltar ao menu principal");
+
+    // --- TABELA DE PROFESSORES ---
+    if (professores.Any())
+    {
+        Console.WriteLine("-------------------------------- PROFESSORES ----------------------------------");
+        Console.WriteLine($" {"NOME",-22} | {"CPF",-14} | {"SALÁRIO",-11} | {"TURMAS"}");
+        Console.WriteLine("-------------------------------------------------------------------------------");
+
+        foreach (var professor in professores)
+        {
+            professor.ExibirDados();
+        }
+        Console.WriteLine("-------------------------------------------------------------------------------\n");
+    }
+
+    if (lista.Count == 0)
+    {
+        Console.WriteLine("Nenhum registro encontrado no sistema.\n");
+    }
+
+    Console.WriteLine("Pressione qualquer tecla para voltar ao menu principal...");
     Console.ReadKey();
 }
 
