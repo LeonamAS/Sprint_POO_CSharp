@@ -30,99 +30,21 @@ internal class Professor : Pessoa
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO PROFESSOR ---\n");
-        Console.Write("Nome do Professor: ");
-        string nome = "";
-        while (true)
-        {
-            Console.Write("Nome do Professor: ");
-            nome = Console.ReadLine()!;
 
-            if (string.IsNullOrWhiteSpace(nome))
-            {
-                Console.WriteLine("O nome não pode ficar em branco. Tente novamente.\n");
-            }
-            else if (nome.Any(char.IsDigit))
-            {
-                Console.WriteLine("Erro: O nome não pode conter números. Tente novamente.\n");
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        string cpf = "";
-        while (true)
-        {
-            Console.Write("CPF (somente números, 11 dígitos): ");
-            string entradaCpf = Console.ReadLine()!;
-            string apenasNumeros = new string(entradaCpf.Where(char.IsDigit).ToArray());
-
-            if (apenasNumeros.Length == 11)
-            {
-                bool cpfJaExiste = listaPessoas.Any(pessoa => new string(pessoa.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros);
-
-                if (cpfJaExiste)
-                {
-                    Console.WriteLine("Erro: Este CPF já está cadastrado no sistema para outra pessoa. Tente novamente.\n");
-                }
-                else
-                {
-                    cpf = apenasNumeros;
-                    break;
-                }
-            }
-            else
-            {
-                Console.WriteLine("\nCPF inválido! O CPF deve conter exatamente 11 números. Tente novamente.");
-            }
-        }
-
-        double salario;
-        while (true)
-        {
-            Console.Write("Salário: ");
-            string entrada = Console.ReadLine()!;
-
-            if (double.TryParse(entrada, out salario))
-            {
-                if (salario >= 0)
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("\nO salário não pode ser negativo. Digite um valor válido.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("\nValor inválido. Por favor, digite apenas números para o salário.");
-            }
-        }
-
-        var prof = new Professor(nome, cpf, DateTime.Now, salario);
+        string nome = Pessoa.ObterNomeValido("Professor");
+        string cpf = Pessoa.ObterCpfValido(listaPessoas);
+        DateTime dataNascimento = Pessoa.ObterDataNascimentoValida();
+        double salario = ObterSalarioValido();
+       
+        var prof = new Professor(nome, cpf, dataNascimento, salario);
 
         Console.WriteLine("Adicione as turmas do professor (-1 para sair)");
         while (true)
         {
-            Console.Write("Turma: ");
-            string turma = Console.ReadLine()!;
-
+            string turma = ObterNomeTurmaValido();
             if (turma == "-1") break;
 
-            if (string.IsNullOrWhiteSpace(turma))
-            {
-                Console.WriteLine("O nome da turma não pode estar vazio!\n");
-            }
-            else if (turma.Any(char.IsDigit))
-            {
-                Console.WriteLine("Erro: O nome da turma não pode conter números.\n");
-            }
-            else
-            {
-                prof.AdicionarTurma(turma);
-            }
+            prof.AdicionarTurma(turma);
         }
         return prof;
     }
@@ -147,47 +69,43 @@ internal class Professor : Pessoa
             professor.ExibirDados();
         }
 
-        Console.Write("\nDigite o CPF do professor para adicionar turmas: ");
-        string cpfBusca = Console.ReadLine()!;
-
-        string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
-
-        var professorEncontrado = professores.FirstOrDefault(professor =>
-            new string(professor.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
-        );
-
-        if (professorEncontrado != null)
+        while (true)
         {
-            Console.WriteLine($"\nAdicionando turmas para: {professorEncontrado.Nome}");
-            Console.WriteLine("Digite o nome da turma (ou digite -1 para parar):");
+            Console.Write("\nDigite o CPF do professor para adicionar turmas (ou digite 0 para cancelar): ");
+            string cpfBusca = Console.ReadLine()!;
 
-            while (true)
+            if (cpfBusca == "0")
             {
-                Console.Write("Turma: ");
-                string turma = Console.ReadLine()!;
+                Console.WriteLine("Operação cancelada.");
+                break;
+            }
 
-                if (turma == "-1") break;
+            string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
 
-                if (string.IsNullOrWhiteSpace(turma))
+            var professorEncontrado = professores.FirstOrDefault(professor =>
+                new string(professor.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
+            );
+
+            if (professorEncontrado != null)
+            {
+                Console.WriteLine($"\nAdicionando turmas para: {professorEncontrado.Nome}");
+                Console.WriteLine("Digite o nome da turma (ou digite -1 para parar):");
+
+                while (true)
                 {
-                    Console.WriteLine("O nome da turma não pode estar vazio!\n");
-                }
-                else if (turma.Any(char.IsDigit))
-                {
-                    Console.WriteLine("Erro: O nome da turma não pode conter números.\n");
-                }
-                else
-                {
+                    string turma = ObterNomeTurmaValido();
+                    if (turma == "-1") break;
+
                     professorEncontrado.AdicionarTurma(turma);
                 }
+                Console.WriteLine("\nTurmas atualizadas com sucesso!");
+                break;
             }
-            Console.WriteLine("\nTurmas atualizadas com sucesso!");
+            else
+            {
+                Console.WriteLine("\nProfessor não encontrado com esse CPF.");
+            }
         }
-        else
-        {
-            Console.WriteLine("\nProfessor não encontrado com esse CPF.");
-        }
-
         Console.WriteLine("Pressione qualquer tecla para voltar...");
         Console.ReadKey();
     }
@@ -212,50 +130,98 @@ internal class Professor : Pessoa
             professor.ExibirDados();
         }
 
-        Console.Write("\nDigite o CPF do professor para alterar o salário: ");
-        string cpfBusca = Console.ReadLine()!;
-
-        string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
-        var professorEncontrado = professores.FirstOrDefault(professor =>
-            new string(professor.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
-        );
-
-        if (professorEncontrado != null)
+        while (true)
         {
-            Console.WriteLine($"\nProfessor(a) selecionado(a): {professorEncontrado.Nome}");
-            Console.WriteLine($"Salário Atual: R${professorEncontrado.Salario:F2}");
+            Console.Write("\nDigite o CPF do professor para alterar o salário (ou digite 0 para cancelar): ");
+            string cpfBusca = Console.ReadLine()!;
 
-            double novoSalario;
-            while (true)
+            if (cpfBusca == "0")
             {
-                Console.Write("\nDigite o novo salário: ");
-                string entrada = Console.ReadLine()!;
+                Console.WriteLine("Operação cancelada.");
+                break;
+            }
+            string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
+            var professorEncontrado = professores.FirstOrDefault(professor =>
+                new string(professor.CPF.Where(char.IsDigit).ToArray()) == numerosBusca
+            );
 
-                if (double.TryParse(entrada, out novoSalario))
+            if (professorEncontrado != null)
+            {
+                Console.WriteLine($"\nProfessor(a) selecionado(a): {professorEncontrado.Nome}");
+                Console.WriteLine($"Salário Atual: R${professorEncontrado.Salario:F2}");
+
+                double novoSalario = ObterSalarioValido();
+
+                professorEncontrado.Salario = novoSalario;
+                Console.WriteLine("\nSalário atualizado com sucesso!");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("\nProfessor não encontrado com esse CPF.");
+            }
+        }
+        Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
+    }
+    private static string ObterNomeTurmaValido()
+    {
+        int tamanhoMinimo = 3;
+        while (true)
+        {
+            Console.Write("Turma: ");
+            string turma = Console.ReadLine()!;
+
+            if (turma == "-1") return "-1";
+
+            if (string.IsNullOrWhiteSpace(turma) || turma.Trim().Length < tamanhoMinimo)
+            {
+                Console.WriteLine($"Erro: O nome da turma deve ter pelo menos {tamanhoMinimo} caracteres.\n");
+            }
+            else if (turma.Any(char.IsDigit))
+            {
+                Console.WriteLine("Erro: O nome da turma não pode conter números.\n");
+            }
+            else if (turma.Any(caractere => !char.IsLetter(caractere) && !char.IsWhiteSpace(caractere)))
+            {
+                Console.WriteLine("Erro: O nome da turma não pode conter caracteres especiais.\n");
+            }
+            else
+            {
+                return turma.Trim();
+            }
+        }
+    }
+    private static double ObterSalarioValido()
+    {
+        double salario;
+        double tetoSalarial = 10000.00;
+
+        while (true)
+        {
+            Console.Write("Digite o salário (R$): ");
+            string entrada = Console.ReadLine()!;
+
+            if (double.TryParse(entrada, out salario))
+            {
+                if (salario < 0)
                 {
-                    if (novoSalario >= 0)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("O salário não pode ser negativo. Digite um valor válido.");
-                    }
+                    Console.WriteLine("Erro: O salário não pode ser negativo. Tente novamente.\n");
+                }
+                else if (salario > tetoSalarial)
+                {
+                    Console.WriteLine($"Erro: O salário ultrapassa o teto permitido de R$ {tetoSalarial:F2}. Tente novamente.\n");
                 }
                 else
                 {
-                    Console.WriteLine("Valor inválido. Por favor, digite apenas números para o salário.");
+                    break;
                 }
             }
-            professorEncontrado.Salario = novoSalario;
-            Console.WriteLine("\nSalário atualizado com sucesso!");
+            else
+            {
+                Console.WriteLine("Erro: Valor inválido. Digite apenas números (ex: 5500,00).\n");
+            }
         }
-        else
-        {
-            Console.WriteLine("\nProfessor não encontrado com esse CPF.");
-        }
-
-        Console.WriteLine("Pressione qualquer tecla para voltar...");
-        Console.ReadKey();
+        return salario;
     }
 }

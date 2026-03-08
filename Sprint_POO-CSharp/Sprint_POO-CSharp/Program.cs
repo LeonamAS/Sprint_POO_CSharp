@@ -19,9 +19,9 @@ while (executando)
 {
     Console.Clear();
     ExibirLogo();
-    Console.WriteLine("\n=========================================");
-    Console.WriteLine("===    SISTEMA DE GESTÃO ACADÊMICA    ===");
-    Console.WriteLine("=========================================\n");
+    Console.WriteLine("\n=================================================================================");
+    Console.WriteLine("===                        SISTEMA DE GESTÃO ACADÊMICA                        ===");
+    Console.WriteLine("=================================================================================\n");
     Console.WriteLine(" 1. Cadastrar Aluno");
     Console.WriteLine(" 2. Cadastrar Professor");
     Console.WriteLine(" 3. Inserir Notas dos Alunos");
@@ -96,8 +96,17 @@ static void ExibirRelatorios(List<Pessoa> lista)
         }
 
         Console.WriteLine("-------------------------------------------------------------------------------");
-        double mediaGeral = alunos.Average(a => a.CalcularMedia());
-        Console.WriteLine($"MÉDIA GERAL DA ESCOLA: {mediaGeral:F2}\n");
+        
+        var alunosAtivos = alunos.Where(aluno => aluno.Situacao == true).ToList();
+        if (alunosAtivos.Any())
+        {
+            double mediaGeral = alunosAtivos.Average(aluno => aluno.CalcularMedia());
+            Console.WriteLine($"MÉDIA GERAL DA ESCOLA (Apenas Ativos): {mediaGeral:F2}\n");
+        }
+        else
+        {
+            Console.WriteLine("MÉDIA GERAL DA ESCOLA: N/A (Nenhum aluno ativo no momento)\n");
+        }
     }
 
     // --- TABELA DE PROFESSORES ---
