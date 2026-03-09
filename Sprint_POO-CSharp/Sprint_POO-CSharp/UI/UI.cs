@@ -20,4 +20,9 @@ public static class UI
         Console.WriteLine("\n" + mensagem + "\n");
         Console.ResetColor();
     }
+    public static void Pausar()
+    {
+        Console.WriteLine("Pressione qualquer tecla para voltar...");
+        Console.ReadKey();
+    }
 }

@@ -4,13 +4,13 @@ namespace Sprint_POO_CSharp.UI;
 
 internal class ProfessorUI
 {
-    public static Professor CadastrarProfessor(List<Pessoa> listaPessoas)
+    public static Professor CadastrarProfessor(List<Professor> professores, List<Aluno> alunos)
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO PROFESSOR ---\n");
 
         string nome = Pessoa.ObterNomeValido("Professor");
-        string cpf = Pessoa.ObterCpfValido(listaPessoas);
+        string cpf = Pessoa.ObterCpfValido(alunos, professores);
         DateTime dataNascimento = Pessoa.ObterDataNascimentoValida();
         double salario = ObterSalarioValido();
 
@@ -26,18 +26,15 @@ internal class ProfessorUI
         }
         return prof;
     }
-    public static void DefinirTurmas(List<Pessoa> listaPessoas)
+    public static void DefinirTurmas(List<Professor> professores)
     {
         Console.Clear();
         Console.WriteLine("--- DEFINIR TURMAS DE PROFESSOR EXISTENTE ---");
 
-        var professores = listaPessoas.OfType<Professor>().ToList();
-
         if (professores.Count == 0)
         {
             UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
-            Console.WriteLine("Pressione qualquer tecla para voltar...");
-            Console.ReadKey();
+            UI.Pausar();
             return;
         }
 
@@ -84,21 +81,17 @@ internal class ProfessorUI
                 UI.ExibirErro("Professor não encontrado com esse CPF.");
             }
         }
-        Console.WriteLine("Pressione qualquer tecla para voltar...");
-        Console.ReadKey();
+        UI.Pausar();
     }
-    public static void AlterarSalario(List<Pessoa> listaPessoas)
+    public static void AlterarSalario(List<Professor> professores)
     {
         Console.Clear();
         Console.WriteLine("--- ALTERAR SALÁRIO DE PROFESSOR ---");
 
-        var professores = listaPessoas.OfType<Professor>().ToList();
-
         if (professores.Count == 0)
         {
             UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
-            Console.WriteLine("Pressione qualquer tecla para voltar...");
-            Console.ReadKey();
+            UI.Pausar();
             return;
         }
 
@@ -139,8 +132,7 @@ internal class ProfessorUI
                 UI.ExibirErro("Professor não encontrado com esse CPF.");
             }
         }
-        Console.WriteLine("Pressione qualquer tecla para voltar...");
-        Console.ReadKey();
+        UI.Pausar();
     }
     private static string ObterNomeTurmaValido()
     {

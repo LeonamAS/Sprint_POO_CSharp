@@ -1,8 +1,9 @@
 ﻿using Sprint_POO_CSharp.Modelos;
 using Sprint_POO_CSharp.UI;
 
-var pessoas = new List<Pessoa>();
-GerarDadosMockup(pessoas);
+List<Aluno> alunos = new List<Aluno>();
+List<Professor> professores = new List<Professor>();
+GerarDadosMockup(alunos, professores);
 void ExibirLogo()
 {
     Console.WriteLine(@"
@@ -38,27 +39,27 @@ while (executando)
     switch (opcao)
     {
         case "1":
-            pessoas.Add(AlunoUI.CadastrarAluno(pessoas));
+            alunos.Add(AlunoUI.CadastrarAluno(alunos, professores));
             FinalizarCadastro("Aluno");
             break;
         case "2":
-            pessoas.Add(ProfessorUI.CadastrarProfessor(pessoas));
+            professores.Add(ProfessorUI.CadastrarProfessor(professores, alunos));
             FinalizarCadastro("Professor");
             break;
         case "3":
-            AlunoUI.InserirNotas(pessoas);
+            AlunoUI.InserirNotas(alunos);
             break;
         case "4":
-            ProfessorUI.DefinirTurmas(pessoas);
+            ProfessorUI.DefinirTurmas(professores);
             break;
         case "5":
-            AlunoUI.AlterarSituacaoAluno(pessoas);
+            AlunoUI.AlterarSituacaoAluno(alunos);
             break;
         case "6":
-            ProfessorUI.AlterarSalario(pessoas);
+            ProfessorUI.AlterarSalario(professores);
             break;
         case "7":
-            ExibirRelatorios(pessoas);
+            ExibirRelatorios(professores, alunos);
             break;
         case "0":
             executando = false;
@@ -71,19 +72,15 @@ while (executando)
 }
 static void FinalizarCadastro(string tipo)
 {
-    UI.ExibirSucesso($"\n{tipo} cadastrado com sucesso!");
-    Console.WriteLine("Pressione qualquer tecla para voltar...");
-    Console.ReadKey();
+    UI.ExibirSucesso($"{tipo} cadastrado com sucesso!");
+    UI.Pausar();
 }
-static void ExibirRelatorios(List<Pessoa> lista)
+static void ExibirRelatorios(List<Professor> professores, List<Aluno> alunos)
 {
     Console.Clear();
     Console.WriteLine("\n===============================================================================");
     Console.WriteLine("                           RELATÓRIO GERAL DO SISTEMA                          ");
     Console.WriteLine("===============================================================================\n");
-
-    var alunos = lista.OfType<Aluno>().ToList();
-    var professores = lista.OfType<Professor>().ToList();
 
     // --- TABELA DE ALUNOS ---
     if (alunos.Any())
@@ -125,17 +122,15 @@ static void ExibirRelatorios(List<Pessoa> lista)
         Console.WriteLine("-------------------------------------------------------------------------------\n");
     }
 
-    if (lista.Count == 0)
+    if (alunos.Count == 0 && professores.Count == 0)
     {
         UI.ExibirAviso("Nenhum registro encontrado no sistema.\n");
     }
-
-    Console.WriteLine("Pressione qualquer tecla para voltar ao menu principal...");
-    Console.ReadKey();
+    UI.Pausar();
 }
 
 // MÉTODO PARA MOCKUP DE DADOS
-static void GerarDadosMockup(List<Pessoa> lista)
+static void GerarDadosMockup(List<Aluno> alunos, List<Professor> professores)
 {
     // --- MOCKUP DE ALUNOS ---
     var aluno1 = new Aluno("Ana Silva", "11111111111", new DateTime(2005, 3, 15), "000001", true);
@@ -154,8 +149,8 @@ static void GerarDadosMockup(List<Pessoa> lista)
     var prof2 = new Professor("Roberto Alves", "44444444444", new DateTime(1980, 1, 20), 6200.00);
     prof2.AdicionarTurma("Conversação Avançada");
 
-    lista.Add(aluno1);
-    lista.Add(aluno2);
-    lista.Add(prof1);
-    lista.Add(prof2);
+    alunos.Add(aluno1);
+    alunos.Add(aluno2);
+    professores.Add(prof1);
+    professores.Add(prof2);
 }

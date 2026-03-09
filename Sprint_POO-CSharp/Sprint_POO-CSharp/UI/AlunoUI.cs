@@ -4,13 +4,13 @@ namespace Sprint_POO_CSharp.UI;
 
 internal class AlunoUI
 {
-    public static Aluno CadastrarAluno(List<Pessoa> listaPessoas)
+    public static Aluno CadastrarAluno(List<Aluno> alunos, List<Professor> professores)
     {
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO ALUNO ---\n");
 
         string nome = Pessoa.ObterNomeValido("Aluno");
-        string cpf = Pessoa.ObterCpfValido(listaPessoas);
+        string cpf = Pessoa.ObterCpfValido(alunos, professores);
         DateTime dataNascimento = Pessoa.ObterDataNascimentoValida();
 
         string matricula = "";
@@ -23,7 +23,7 @@ internal class AlunoUI
 
             if (apenasNumerosMatricula.Length == 6)
             {
-                bool matriculaJaExiste = listaPessoas.OfType<Aluno>().Any(aluno => aluno.Matricula == apenasNumerosMatricula);
+                bool matriculaJaExiste = alunos.Any(aluno => aluno.Matricula == apenasNumerosMatricula);
 
                 if (matriculaJaExiste)
                 {
@@ -59,18 +59,15 @@ internal class AlunoUI
         }
         return aluno;
     }
-    public static void InserirNotas(List<Pessoa> listaPessoas)
+    public static void InserirNotas(List<Aluno> alunos)
     {
         Console.Clear();
         Console.WriteLine("--- INSERIR NOTAS DE ALUNO EXISTENTE ---");
 
-        var alunos = listaPessoas.OfType<Aluno>().ToList();
-
         if (alunos.Count == 0)
         {
             UI.ExibirAviso("\nNenhum aluno cadastrado no sistema.");
-            Console.WriteLine("Pressione qualquer tecla para voltar...");
-            Console.ReadKey();
+            UI.Pausar();
             return;
         }
 
@@ -124,21 +121,17 @@ internal class AlunoUI
                 UI.ExibirErro("Aluno não encontrado com esse CPF.");
             }
         }
-        Console.WriteLine("Pressione qualquer tecla para voltar...");
-        Console.ReadKey();
+        UI.Pausar();
     }
-    public static void AlterarSituacaoAluno(List<Pessoa> listaPessoas)
+    public static void AlterarSituacaoAluno(List<Aluno> alunos)
     {
         Console.Clear();
         Console.WriteLine("--- ALTERAR SITUAÇÃO DA MATRÍCULA (ATIVAR / TRANCAR) ---");
 
-        var alunos = listaPessoas.OfType<Aluno>().ToList();
-
         if (alunos.Count == 0)
         {
             UI.ExibirAviso("Nenhum aluno cadastrado no sistema.");
-            Console.WriteLine("Pressione qualquer tecla para voltar...");
-            Console.ReadKey();
+            UI.Pausar();
             return;
         }
 
@@ -177,7 +170,6 @@ internal class AlunoUI
                 UI.ExibirErro("Aluno não encontrado com esse CPF.");
             }
         }
-        Console.WriteLine("\nPressione qualquer tecla para voltar...");
-        Console.ReadKey();
+        UI.Pausar();
     }
 }

@@ -66,7 +66,7 @@ internal abstract class Pessoa
         }
         return nome.Trim();
     }
-    public static string ObterCpfValido(List<Pessoa> listaPessoas)
+    public static string ObterCpfValido(List<Aluno> alunos, List<Professor> professores)
     {
         string cpf = "";
         while (true)
@@ -77,7 +77,8 @@ internal abstract class Pessoa
 
             if (apenasNumeros.Length == 11)
             {
-                bool cpfJaExiste = listaPessoas.Any(pessoa => new string(pessoa.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros);
+                bool cpfJaExiste = alunos.Any(a => new string(a.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros) ||
+                   professores.Any(p => new string(p.CPF.Where(char.IsDigit).ToArray()) == apenasNumeros);
 
                 if (cpfJaExiste)
                 {
