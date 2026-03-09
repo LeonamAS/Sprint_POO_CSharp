@@ -1,4 +1,5 @@
 ﻿using Sprint_POO_CSharp.Modelos;
+using Sprint_POO_CSharp.UI;
 
 var pessoas = new List<Pessoa>();
 GerarDadosMockup(pessoas);
@@ -63,13 +64,14 @@ while (executando)
             executando = false;
             break;
         default:
-            Console.WriteLine("Opção inválida!");
+            UI.ExibirErro("Opção inválida!");
+            Thread.Sleep(1000);
             break;
     }
 }
 static void FinalizarCadastro(string tipo)
 {
-    Console.WriteLine($"\n{tipo} cadastrado com sucesso!");
+    UI.ExibirSucesso($"\n{tipo} cadastrado com sucesso!");
     Console.WriteLine("Pressione qualquer tecla para voltar...");
     Console.ReadKey();
 }
@@ -105,7 +107,7 @@ static void ExibirRelatorios(List<Pessoa> lista)
         }
         else
         {
-            Console.WriteLine("MÉDIA GERAL DA ESCOLA: N/A (Nenhum aluno ativo no momento)\n");
+            UI.ExibirAviso("MÉDIA GERAL DA ESCOLA: N/A (Nenhum aluno ativo no momento)\n");
         }
     }
 
@@ -125,7 +127,7 @@ static void ExibirRelatorios(List<Pessoa> lista)
 
     if (lista.Count == 0)
     {
-        Console.WriteLine("Nenhum registro encontrado no sistema.\n");
+        UI.ExibirAviso("Nenhum registro encontrado no sistema.\n");
     }
 
     Console.WriteLine("Pressione qualquer tecla para voltar ao menu principal...");

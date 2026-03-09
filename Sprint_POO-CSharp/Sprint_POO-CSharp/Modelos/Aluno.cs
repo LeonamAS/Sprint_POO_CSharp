@@ -1,5 +1,7 @@
 ﻿namespace Sprint_POO_CSharp.Modelos;
 
+using Sprint_POO_CSharp.UI;
+
 internal class Aluno : Pessoa
 {
     private string Matricula { get; set; }
@@ -17,7 +19,7 @@ internal class Aluno : Pessoa
     {
         if (!Situacao)
         {
-            Console.WriteLine($"\nAção Negada: O aluno {Nome} está com a matrícula inativa e não pode receber notas. ");
+            UI.ExibirErro($"Ação Negada: O aluno {Nome} está com a matrícula inativa e não pode receber notas. ");
             return;
         }
         if (nota >= 0 && nota <= 10)
@@ -26,7 +28,7 @@ internal class Aluno : Pessoa
         }
         else
         {
-            Console.WriteLine($"\nNota {nota} inválida!!! Use valores entre 0 e 10.");
+            UI.ExibirErro($"Nota {nota} inválida!!! Use valores entre 0 e 10.");
         }
     }
     public double CalcularMedia() => Notas.Count > 0 ? Notas.Average() : 0;
@@ -58,7 +60,7 @@ internal class Aluno : Pessoa
 
                 if (matriculaJaExiste)
                 {
-                    Console.WriteLine("\nErro: Esta matrícula já está cadastrada para outro aluno. Tente novamente.\n");
+                    UI.ExibirErro("Erro: Esta matrícula já está cadastrada para outro aluno. Tente novamente.\n");
                 }
                 else
                 {
@@ -68,7 +70,7 @@ internal class Aluno : Pessoa
             }
             else
             {
-                Console.WriteLine("\nMatrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
+                UI.ExibirErro("Matrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
             }
         }
 
@@ -85,7 +87,7 @@ internal class Aluno : Pessoa
             }
             else
             {
-                Console.WriteLine("Valor inválido. Digite um número.");
+                UI.ExibirErro("Valor inválido. Digite um número.");
             }
         }
         return aluno;
@@ -99,7 +101,7 @@ internal class Aluno : Pessoa
 
         if (alunos.Count == 0)
         {
-            Console.WriteLine("\nNenhum aluno cadastrado no sistema.");
+            UI.ExibirAviso("\nNenhum aluno cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -118,7 +120,7 @@ internal class Aluno : Pessoa
 
             if (cpfBusca == "0")
             {
-                Console.WriteLine("Operação cancelada.");
+                UI.ExibirAviso("Operação cancelada.");
                 break;
             }
 
@@ -130,7 +132,7 @@ internal class Aluno : Pessoa
 
             if (alunoEncontrado != null)
             {
-                Console.WriteLine($"\nAdicionando notas para: {alunoEncontrado.Nome}");
+                UI.ExibirAviso($"\nAdicionando notas para: {alunoEncontrado.Nome}");
                 Console.WriteLine("Digite as notas (ou -1 para parar):");
 
                 while (true)
@@ -144,15 +146,15 @@ internal class Aluno : Pessoa
                     }
                     else
                     {
-                        Console.WriteLine("Valor inválido. Digite um número.");
+                        UI.ExibirErro("Valor inválido. Digite um número.");
                     }
                 }
-                Console.WriteLine("\nNotas atualizadas com sucesso!");
+                UI.ExibirSucesso("Notas atualizadas com sucesso!");
                 break;
             }
             else
             {
-                Console.WriteLine("\nAluno não encontrado com esse CPF.");
+                UI.ExibirErro("Aluno não encontrado com esse CPF.");
             }
         }
         Console.WriteLine("Pressione qualquer tecla para voltar...");
@@ -167,7 +169,7 @@ internal class Aluno : Pessoa
 
         if (alunos.Count == 0)
         {
-            Console.WriteLine("Nenhum aluno cadastrado no sistema.");
+            UI.ExibirAviso("Nenhum aluno cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -186,7 +188,7 @@ internal class Aluno : Pessoa
 
             if (cpfBusca == "0")
             {
-                Console.WriteLine("Operação cancelada.");
+                UI.ExibirAviso("Operação cancelada.");
                 break;
             }
 
@@ -200,12 +202,12 @@ internal class Aluno : Pessoa
                 alunoEncontrado.Situacao = !alunoEncontrado.Situacao;
 
                 string statusAtual = alunoEncontrado.Situacao ? "Ativa" : "Inativa";
-                Console.WriteLine($"\nSucesso! A matrícula de {alunoEncontrado.Nome} agora está: {statusAtual}");
+                UI.ExibirSucesso($"Sucesso! A matrícula de {alunoEncontrado.Nome} agora está: {statusAtual}");
                 break;
             }
             else
             {
-                Console.WriteLine("\nAluno não encontrado com esse CPF.");
+                UI.ExibirErro("Aluno não encontrado com esse CPF.");
             }
         }
         Console.WriteLine("\nPressione qualquer tecla para voltar...");

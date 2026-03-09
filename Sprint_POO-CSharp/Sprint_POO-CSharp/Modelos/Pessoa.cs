@@ -1,5 +1,7 @@
 ﻿namespace Sprint_POO_CSharp.Modelos;
 
+using Sprint_POO_CSharp.UI;
+
 internal abstract class Pessoa
 {
     public string Nome { get; set; }
@@ -47,15 +49,15 @@ internal abstract class Pessoa
 
             if (string.IsNullOrWhiteSpace(nome) || nome.Trim().Length < tamanhoMinimo)
             {
-                Console.WriteLine($"Erro: O nome deve ter pelo menos {tamanhoMinimo} caracteres e não pode ser vazio. Tente novamente.\n");
+                UI.ExibirErro($"Erro: O nome deve ter pelo menos {tamanhoMinimo} caracteres e não pode ser vazio. Tente novamente.");
             }
             else if (nome.Any(char.IsDigit))
             {
-                Console.WriteLine("Erro: O nome não pode conter números. Tente novamente.\n");
+                UI.ExibirErro("Erro: O nome não pode conter números. Tente novamente.");
             }
             else if (nome.Any(caractere => !char.IsLetter(caractere) && !char.IsWhiteSpace(caractere)))
             {
-                Console.WriteLine("Erro: O nome não pode conter caracteres especiais (ex: @, #, !). Tente novamente.\n");
+                UI.ExibirErro("Erro: O nome não pode conter caracteres especiais (ex: @, #, !). Tente novamente.");
             }
             else
             {
@@ -79,7 +81,7 @@ internal abstract class Pessoa
 
                 if (cpfJaExiste)
                 {
-                    Console.WriteLine("Erro: Este CPF já está cadastrado no sistema para outra pessoa. Tente novamente.\n");
+                    UI.ExibirErro("Erro: Este CPF já está cadastrado no sistema para outra pessoa. Tente novamente.");
                 }
                 else
                 {
@@ -89,7 +91,7 @@ internal abstract class Pessoa
             }
             else
             {
-                Console.WriteLine("\nCPF inválido! O CPF deve conter exatamente 11 números. Tente novamente.");
+                UI.ExibirErro("CPF inválido! O CPF deve conter exatamente 11 números. Tente novamente.");
             }
         }
         return cpf;
@@ -106,11 +108,11 @@ internal abstract class Pessoa
             {
                 if (dataNascimento > DateTime.Now)
                 {
-                    Console.WriteLine("Erro: A data de nascimento não pode ser no futuro. Tente novamente.\n");
+                    UI.ExibirErro("Erro: A data de nascimento não pode ser no futuro. Tente novamente.");
                 }
                 else if (dataNascimento < DateTime.Now.AddYears(-100))
                 {
-                    Console.WriteLine("Erro: Idade inválida. O sistema não permite cadastros com mais de 100 anos. Tente novamente.\n");
+                    UI.ExibirErro("Erro: Idade inválida. O sistema não permite cadastros com mais de 100 anos. Tente novamente.");
                 }
                 else
                 {
@@ -119,7 +121,7 @@ internal abstract class Pessoa
             }
             else
             {
-                Console.WriteLine("Formato de data inválido. Use o formato dd/mm/aaaa (ex: 15/05/2000).\n");
+                UI.ExibirErro("Formato de data inválido. Use o formato dd/mm/aaaa (ex: 15/05/2000).");
             }
         }
         return dataNascimento;

@@ -1,5 +1,7 @@
 ﻿namespace Sprint_POO_CSharp.Modelos;
 
+using Sprint_POO_CSharp.UI;
+
 internal class Professor : Pessoa
 {
     private double Salario { get; set; }
@@ -18,7 +20,7 @@ internal class Professor : Pessoa
         }
         else
         {
-            Console.WriteLine("\nO nome da turma não pode estar vazio!");
+            UI.ExibirErro("O nome da turma não pode estar vazio!");
         }
     }
     public override void ExibirDados()
@@ -57,7 +59,7 @@ internal class Professor : Pessoa
 
         if (professores.Count == 0)
         {
-            Console.WriteLine("\nNenhum professor cadastrado no sistema.");
+            UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -76,7 +78,7 @@ internal class Professor : Pessoa
 
             if (cpfBusca == "0")
             {
-                Console.WriteLine("Operação cancelada.");
+                UI.ExibirAviso("Operação cancelada.");
                 break;
             }
 
@@ -88,7 +90,7 @@ internal class Professor : Pessoa
 
             if (professorEncontrado != null)
             {
-                Console.WriteLine($"\nAdicionando turmas para: {professorEncontrado.Nome}");
+                UI.ExibirAviso($"\nAdicionando turmas para: {professorEncontrado.Nome}");
                 Console.WriteLine("Digite o nome da turma (ou digite -1 para parar):");
 
                 while (true)
@@ -98,12 +100,12 @@ internal class Professor : Pessoa
 
                     professorEncontrado.AdicionarTurma(turma);
                 }
-                Console.WriteLine("\nTurmas atualizadas com sucesso!");
+                UI.ExibirSucesso("Turmas atualizadas com sucesso!");
                 break;
             }
             else
             {
-                Console.WriteLine("\nProfessor não encontrado com esse CPF.");
+                UI.ExibirErro("Professor não encontrado com esse CPF.");
             }
         }
         Console.WriteLine("Pressione qualquer tecla para voltar...");
@@ -118,7 +120,7 @@ internal class Professor : Pessoa
 
         if (professores.Count == 0)
         {
-            Console.WriteLine("\nNenhum professor cadastrado no sistema.");
+            UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
             Console.WriteLine("Pressione qualquer tecla para voltar...");
             Console.ReadKey();
             return;
@@ -137,7 +139,7 @@ internal class Professor : Pessoa
 
             if (cpfBusca == "0")
             {
-                Console.WriteLine("Operação cancelada.");
+                UI.ExibirAviso("Operação cancelada.");
                 break;
             }
             string numerosBusca = new string(cpfBusca.Where(char.IsDigit).ToArray());
@@ -147,18 +149,18 @@ internal class Professor : Pessoa
 
             if (professorEncontrado != null)
             {
-                Console.WriteLine($"\nProfessor(a) selecionado(a): {professorEncontrado.Nome}");
+                UI.ExibirAviso($"\nProfessor(a) selecionado(a): {professorEncontrado.Nome}");
                 Console.WriteLine($"Salário Atual: R${professorEncontrado.Salario:F2}");
 
                 double novoSalario = ObterSalarioValido();
 
                 professorEncontrado.Salario = novoSalario;
-                Console.WriteLine("\nSalário atualizado com sucesso!");
+                UI.ExibirSucesso("Salário atualizado com sucesso!");
                 break;
             }
             else
             {
-                Console.WriteLine("\nProfessor não encontrado com esse CPF.");
+                UI.ExibirErro("Professor não encontrado com esse CPF.");
             }
         }
         Console.WriteLine("Pressione qualquer tecla para voltar...");
@@ -176,15 +178,15 @@ internal class Professor : Pessoa
 
             if (string.IsNullOrWhiteSpace(turma) || turma.Trim().Length < tamanhoMinimo)
             {
-                Console.WriteLine($"Erro: O nome da turma deve ter pelo menos {tamanhoMinimo} caracteres.\n");
+                UI.ExibirErro($"Erro: O nome da turma deve ter pelo menos {tamanhoMinimo} caracteres.");
             }
             else if (turma.Any(char.IsDigit))
             {
-                Console.WriteLine("Erro: O nome da turma não pode conter números.\n");
+                UI.ExibirErro("Erro: O nome da turma não pode conter números.");
             }
             else if (turma.Any(caractere => !char.IsLetter(caractere) && !char.IsWhiteSpace(caractere)))
             {
-                Console.WriteLine("Erro: O nome da turma não pode conter caracteres especiais.\n");
+                UI.ExibirErro("Erro: O nome da turma não pode conter caracteres especiais.");
             }
             else
             {
@@ -206,11 +208,11 @@ internal class Professor : Pessoa
             {
                 if (salario < 0)
                 {
-                    Console.WriteLine("Erro: O salário não pode ser negativo. Tente novamente.\n");
+                    UI.ExibirErro("Erro: O salário não pode ser negativo. Tente novamente.");
                 }
                 else if (salario > tetoSalarial)
                 {
-                    Console.WriteLine($"Erro: O salário ultrapassa o teto permitido de R$ {tetoSalarial:F2}. Tente novamente.\n");
+                    UI.ExibirErro($"Erro: O salário ultrapassa o teto permitido de R$ {tetoSalarial:F2}. Tente novamente.");
                 }
                 else
                 {
@@ -219,7 +221,7 @@ internal class Professor : Pessoa
             }
             else
             {
-                Console.WriteLine("Erro: Valor inválido. Digite apenas números (ex: 5500,00).\n");
+                UI.ExibirErro("Erro: Valor inválido. Digite apenas números (ex: 5500,00).");
             }
         }
         return salario;
