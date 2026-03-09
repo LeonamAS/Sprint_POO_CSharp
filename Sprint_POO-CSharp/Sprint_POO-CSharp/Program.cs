@@ -38,24 +38,24 @@ while (executando)
     switch (opcao)
     {
         case "1":
-            pessoas.Add(Aluno.CadastrarAluno(pessoas));
+            pessoas.Add(AlunoUI.CadastrarAluno(pessoas));
             FinalizarCadastro("Aluno");
             break;
         case "2":
-            pessoas.Add(Professor.CadastrarProfessor(pessoas));
+            pessoas.Add(ProfessorUI.CadastrarProfessor(pessoas));
             FinalizarCadastro("Professor");
             break;
         case "3":
-            Aluno.InserirNotas(pessoas);
+            AlunoUI.InserirNotas(pessoas);
             break;
         case "4":
-            Professor.DefinirTurmas(pessoas);
+            ProfessorUI.DefinirTurmas(pessoas);
             break;
         case "5":
-            Aluno.AlterarSituacaoAluno(pessoas);
+            AlunoUI.AlterarSituacaoAluno(pessoas);
             break;
         case "6":
-            Professor.AlterarSalario(pessoas);
+            ProfessorUI.AlterarSalario(pessoas);
             break;
         case "7":
             ExibirRelatorios(pessoas);
