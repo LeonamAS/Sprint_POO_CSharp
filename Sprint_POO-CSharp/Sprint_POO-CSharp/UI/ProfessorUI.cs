@@ -9,9 +9,9 @@ internal class ProfessorUI
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO PROFESSOR ---\n");
 
-        string nome = Pessoa.ObterNomeValido("Professor");
-        string cpf = Pessoa.ObterCpfValido(alunos, professores);
-        DateTime dataNascimento = Pessoa.ObterDataNascimentoValida();
+        string nome = PessoaUI.ObterNomeValido("Professor");
+        string cpf = PessoaUI.ObterCpfValido(alunos, professores);
+        DateTime dataNascimento = PessoaUI.ObterDataNascimentoValida();
         double salario = ObterSalarioValido();
 
         var prof = new Professor(nome, cpf, dataNascimento, salario);
@@ -33,7 +33,7 @@ internal class ProfessorUI
 
         if (professores.Count == 0)
         {
-            UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
+            UI.ExibirAviso("Nenhum professor cadastrado no sistema.");
             UI.Pausar();
             return;
         }
@@ -90,7 +90,7 @@ internal class ProfessorUI
 
         if (professores.Count == 0)
         {
-            UI.ExibirAviso("\nNenhum professor cadastrado no sistema.");
+            UI.ExibirAviso("Nenhum professor cadastrado no sistema.");
             UI.Pausar();
             return;
         }
@@ -118,7 +118,7 @@ internal class ProfessorUI
 
             if (professorEncontrado != null)
             {
-                UI.ExibirAviso($"\nProfessor(a) selecionado(a): {professorEncontrado.Nome}");
+                UI.ExibirAviso($"Professor(a) selecionado(a): {professorEncontrado.Nome}");
                 Console.WriteLine($"Salário Atual: R${professorEncontrado.Salario:F2}");
 
                 double novoSalario = ObterSalarioValido();
@@ -166,6 +166,7 @@ internal class ProfessorUI
     {
         double salario;
         double tetoSalarial = 10000.00;
+        double salarioMinimo = 1621.00;
 
         while (true)
         {
@@ -174,9 +175,9 @@ internal class ProfessorUI
 
             if (double.TryParse(entrada, out salario))
             {
-                if (salario < 0)
+                if (salario < salarioMinimo)
                 {
-                    UI.ExibirErro("Erro: O salário não pode ser negativo. Tente novamente.");
+                    UI.ExibirErro($"Erro: O salário não pode ser menor que R$ {salarioMinimo:F2} ou negativo. Tente novamente.");
                 }
                 else if (salario > tetoSalarial)
                 {

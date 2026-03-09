@@ -9,9 +9,9 @@ internal class AlunoUI
         Console.Clear();
         Console.WriteLine("--- CADASTRAR NOVO ALUNO ---\n");
 
-        string nome = Pessoa.ObterNomeValido("Aluno");
-        string cpf = Pessoa.ObterCpfValido(alunos, professores);
-        DateTime dataNascimento = Pessoa.ObterDataNascimentoValida();
+        string nome = PessoaUI.ObterNomeValido("Aluno");
+        string cpf = PessoaUI.ObterCpfValido(alunos, professores);
+        DateTime dataNascimento = PessoaUI.ObterDataNascimentoValida();
 
         string matricula = "";
         while (true)
