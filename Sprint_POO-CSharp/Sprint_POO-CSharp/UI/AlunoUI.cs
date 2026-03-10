@@ -12,34 +12,8 @@ internal class AlunoUI
         string nome = PessoaUI.ObterNomeValido("Aluno");
         string cpf = PessoaUI.ObterCpfValido(alunos, professores);
         DateTime dataNascimento = PessoaUI.ObterDataNascimentoValida();
-
-        string matricula = "";
-        while (true)
-        {
-            Console.Write("Matrícula (exatamente 6 números): ");
-            string entradaMatricula = Console.ReadLine()!;
-
-            string apenasNumerosMatricula = new string(entradaMatricula.Where(char.IsDigit).ToArray());
-
-            if (apenasNumerosMatricula.Length == 6)
-            {
-                bool matriculaJaExiste = alunos.Any(aluno => aluno.Matricula == apenasNumerosMatricula);
-
-                if (matriculaJaExiste)
-                {
-                    UI.ExibirErro("Erro: Esta matrícula já está cadastrada para outro aluno. Tente novamente.\n");
-                }
-                else
-                {
-                    matricula = apenasNumerosMatricula;
-                    break;
-                }
-            }
-            else
-            {
-                UI.ExibirErro("Matrícula inválida! A matrícula deve conter exatamente 6 números. Tente novamente.");
-            }
-        }
+        string matricula = GerarMatricula(alunos);
+        UI.ExibirAviso($"Matrícula gerada para o aluno: {matricula}");
 
         var aluno = new Aluno(nome, cpf, dataNascimento, matricula, true);
 
@@ -171,5 +145,27 @@ internal class AlunoUI
             }
         }
         UI.Pausar();
+    }
+    private static string GerarMatricula(List<Aluno> alunos)
+    {
+        if (alunos.Count == 0)
+        {
+            return "000001";
+        }
+        int maiorMatricula = 0;
+
+        foreach (var aluno in alunos)
+        {
+            if (int.TryParse(aluno.Matricula, out int numeroMatricula))
+            {
+                if (numeroMatricula > maiorMatricula)
+                {
+                    maiorMatricula = numeroMatricula;
+                }
+            }
+        }
+        int novaMatricula = maiorMatricula + 1;
+
+        return novaMatricula.ToString("D6");
     }
 }
